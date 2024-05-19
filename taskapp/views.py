@@ -120,7 +120,7 @@ class TaskDetailView(APIView):
             Response: A JSON response with the updated task data and status code 200, or errors and status code 400.
         """
         try:
-            task = Task.object.get(pk=pk)
+            task = Task.objects.get(pk=pk)
         except Task.DoesNotExist:
             return Response({
                 "data": None,
@@ -159,7 +159,7 @@ class TaskDetailView(APIView):
                 "data": None,
                 "errorMessage": [{
                     "code": "invalid_pk",
-                    "message": "FAQ with this pk does not exist"
+                    "message": "Task with this pk does not exist"
                 }],
                 "error": True
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -168,6 +168,6 @@ class TaskDetailView(APIView):
 
         return Response({
             "data": None,
-            "message": "FAQ deleted successfully",
+            "message": "Task deleted successfully",
             "error": False
         }, status=status.HTTP_200_OK)
