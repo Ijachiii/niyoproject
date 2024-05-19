@@ -32,14 +32,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # custom apps
     "accounts",
     "taskapp",
+    # system apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third party apps
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
@@ -146,6 +149,7 @@ REST_FRAMEWORK = {
 }
 
 
+# Swagger documentation
 SPECTACULAR_SETTINGS = {
     "TITLE": "Task Project",
     "DESCRIPTION": "Api endpoints for Task project",
@@ -153,6 +157,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 
+# JWT token settings
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=3),

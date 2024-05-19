@@ -40,6 +40,16 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
+    """
+    Custom user model where email is the unique identifier for authentication instead of usernames.
+
+    Attributes:
+        id (UUIDField): Primary key for the user model.
+        email (EmailField): Unique email address for the user.
+        first_name (CharField): User's first name.
+        last_name (CharField): User's last name.
+        date_joined (DateTimeField): Date and time when the user joined.
+    """
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, unique=True, editable=False)
     email = models.EmailField(_("email address"), unique=True)

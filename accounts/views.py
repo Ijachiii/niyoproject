@@ -11,9 +11,24 @@ from .models import CustomUser
 
 
 class UserSignUpView(APIView):
+    """
+    API view to handle user sign up.
+
+    Attributes:
+        serializer_class (UserSerializer): Serializer class for user sign up.
+    """
     serializer_class = UserSerializer
 
     def post(self, request):
+        """
+        Handle POST request to create a new user.
+
+        Args:
+            request (Request): The request object containing user data.
+
+        Returns:
+            Response: The response object with user data and status code.
+        """
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -23,9 +38,26 @@ class UserSignUpView(APIView):
 
 
 class LoginView(TokenObtainPairView):
+    """
+    API view to handle user login and JWT token generation.
+
+    Attributes:
+        serializer_class (LoginSerializer): Serializer class for user login.
+    """
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
+        """
+        Handle POST request to authenticate user and return JWT tokens.
+
+        Args:
+            request (Request): The request object containing login credentials.
+            *args: Additional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            Response: The response object with JWT tokens and user data, or error message and status code.
+        """
         serializer = LoginSerializer(data=request.data)
         if "email" in request.data:
             email = serializer.initial_data["email"]

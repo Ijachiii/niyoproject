@@ -10,10 +10,26 @@ from .serializers import TaskSerializer
 
 
 class TasksView(APIView):
+    """
+    View to handle creating and retrieving tasks.
+
+    Attributes:
+        permission_classes (list): List of permissions required to access the view.
+        serializer_class (class): The serializer class used for validating and serializing data.
+    """
     permission_classes = [IsAuthenticated,]
     serializer_class = TaskSerializer
 
     def get(self, request):
+        """
+        GET method to retrieve all tasks for the authenticated user.
+
+        Args:
+            request (Request): The HTTP request object.
+
+        Returns:
+            Response: A JSON response containing the list of tasks and status code 200.
+        """
         tasks = Task.objects.filter(user=request.user)
         serializer = TaskSerializer(tasks, many=True)
 
@@ -24,6 +40,15 @@ class TasksView(APIView):
         }, status=status.HTTP_200_OK)
 
     def post(self, request):
+        """
+        POST method to create a new task for the authenticated user.
+
+        Args:
+            request (Request): The HTTP request object containing task data.
+
+        Returns:
+            Response: A JSON response with the created task data and status code 200, or errors and status code 400.
+        """
         serializer = TaskSerializer(data=request.data)
         print(request.user.id)
 
@@ -43,10 +68,27 @@ class TasksView(APIView):
 
 
 class TaskDetailView(APIView):
+    """
+    View to handle retrieving, updating, and deleting a specific task.
+
+    Attributes:
+        permission_classes (list): List of permissions required to access the view.
+        serializer_class (class): The serializer class used for validating and serializing data.
+    """
     permission_classes = [IsAuthenticated,]
     serializer_class = TaskSerializer
 
     def get(self, request, pk=None):
+        """
+        GET method to retrieve a specific task by primary key.
+
+        Args:
+            request (Request): The HTTP request object.
+            pk (int, optional): The primary key of the task.
+
+        Returns:
+            Response: A JSON response with the task data and status code 200, or errors and status code 400.
+        """
         try:
             task = Task.objects.get(pk=pk)
         except Task.DoesNotExist:
@@ -67,6 +109,16 @@ class TaskDetailView(APIView):
         }, status=status.HTTP_200_OK)
 
     def patch(self, request, pk=None):
+        """
+        PATCH method to update a specific task by primary key.
+
+        Args:
+            request (Request): The HTTP request object containing task data.
+            pk (int, optional): The primary key of the task.
+
+        Returns:
+            Response: A JSON response with the updated task data and status code 200, or errors and status code 400.
+        """
         try:
             task = Task.object.get(pk=pk)
         except Task.DoesNotExist:
@@ -90,6 +142,16 @@ class TaskDetailView(APIView):
             }, status=status.HTTP_200_OK)
 
     def delete(self, request, pk=None):
+        """
+        DELETE method to delete a specific task by primary key.
+
+        Args:
+            request (Request): The HTTP request object.
+            pk (int, optional): The primary key of the task.
+
+        Returns:
+            Response: A JSON response indicating success and status code 200, or errors and status code 400.
+        """
         try:
             task = Task.objects.get(pk=pk)
         except Task.DoesNotExist:
