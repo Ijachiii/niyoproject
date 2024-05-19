@@ -6,6 +6,7 @@ from .serializers import UserSerializer, LoginSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.contrib.auth import login
 from .models import CustomUser
+from rest_framework.permissions import AllowAny
 
 # Create your views here.
 
@@ -96,3 +97,27 @@ class LoginView(TokenObtainPairView):
             "errorMessage": serializer.errors,
             "error": True,
         }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    """
+    Custom token refresh view for refreshing JWT tokens.
+
+    This view extends the TokenRefreshView provided by the rest_framework_simplejwt library.
+    It overrides the default behavior to return a custom response format.
+
+    Attributes:
+        permission_classes (list): List of permission classes applied to the view.
+        serializer_class: Serializer class used for token refreshing (set to None by default).
+    """
+    permission_classes = [AllowAny,]
+    serializer_class = None
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        return Response({
+            "data": response.data,
+            "message": "Success",
+            "error": False
+        }, status=status.HTTP_200_OK)
