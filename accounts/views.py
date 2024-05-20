@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.contrib.auth import login
 from .models import CustomUser
 from rest_framework.permissions import AllowAny
+from .custom_exception_handler import error_message
 
 # Create your views here.
 
@@ -33,9 +34,17 @@ class UserSignUpView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({
+                "data": serializer.data,
+                "message": "User created successfully",
+                "error": False
+            }, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            "data": None,
+            "errorMessage": error_message(serializer),
+            "error": True,
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(TokenObtainPairView):
@@ -94,7 +103,7 @@ class LoginView(TokenObtainPairView):
 
         return Response({
             "data": None,
-            "errorMessage": serializer.errors,
+            "errorMessage": error_message(serializer),
             "error": True,
         }, status=status.HTTP_400_BAD_REQUEST)
 

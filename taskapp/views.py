@@ -62,7 +62,7 @@ class TasksView(APIView):
 
         return Response({
             "data": None,
-            "errorMessage": serializer.errors,
+            "errorMessage": error_message(serializer),
             "error": True,
         }, status=status.HTTP_400_BAD_REQUEST)
 
